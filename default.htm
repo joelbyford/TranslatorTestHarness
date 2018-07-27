@@ -1,0 +1,245 @@
+<html>
+<head>
+    <title>Test Form</title>
+<script>
+    /*=======================================================================
+    ================================ TO-DO ==================================
+
+    Need to replace [ApiKey] to funcction.  
+    Search/Replace this value before testing.
+
+    ================================ IMPORTANT ==============================
+    =========================================================================
+    = THIS EXAMPLE IS FOR TEST PURPOSES ONLY!!  DO NOT USE IN PRODUCTION    =
+    = USING THIS IN PRODUCTION WILL EXPOSE YOUR API KEY FOR ALL TO SEE!!    =
+    =======================================================================*/
+
+    /*--------------
+    - Send Handler -
+    ----------------*/
+    function sendForm() {    
+        var xhr = new XMLHttpRequest();
+        
+        //response handler
+        //see API documentation here: https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                transCallback(xhr);
+            }
+        }
+
+        //send handler
+        //see API documentation here: https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview
+        var host = "https://api.cognitive.microsofttranslator.com/";
+        var path = "translate?api-version=3.0&to=" + document.getElementById("t_tl").value;
+        xhr.open("POST", host + path);
+        xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        /*=======================================================================
+        ================================ IMPORTANT ==============================
+        =========================================================================
+        = THIS EXAMPLE IS FOR TEST PURPOSES ONLY!!  DO NOT USE IN PRODUCTION    =
+        = USING THIS IN PRODUCTION WILL EXPOSE YOUR API KEY FOR ALL TO SEE!!    =
+        =                                                                       =
+        = Consider using server-side processing of the request instead!         =
+        =========================================================================
+        =======================================================================*/
+        xhr.setRequestHeader("Ocp-Apim-Subscription-Key", "[ApiKey]");
+        var item = {
+                "Text":document.getElementById("t_sv").value
+        }
+
+        //API expects an array of "Text" elements.  Just adding square brackets [] for now as we are only sending one
+        xhr.send("[" + JSON.stringify(item)+ "]");
+
+        return false;
+    }
+
+    /*------------------
+    - Response Handler -
+    --------------------*/
+    function transCallback(XmlHttpObject){
+        //drop raw results to screen
+        document.getElementById("rawResults").innerHTML =  XmlHttpObject.responseText;
+
+        //parse results and cleanup (ignoring image region data for this test harness)
+        var rawJSON = XmlHttpObject.responseText;
+        var tmp = JSON.parse(rawJSON);
+
+        //show translated text
+        document.getElementById("t_tv").innerText = tmp[0].translations[0].text;
+
+    }
+
+
+</script>
+</head>
+<body>
+    <h1>Translation Test Harness</h1>
+    <form>
+        <div>From:
+            <select id="t_sl" aria-label="Language selection">
+                <option value="auto-detect" selected="selected">Auto-Detect</option>
+                <option value="af">Afrikaans</option>
+                <option value="ar">Arabic</option>
+                <option value="bn-BD">Bangla</option>
+                <option value="bs-Latn">Bosnian</option>
+                <option value="bg">Bulgarian</option>
+                <option value="yue">Cantonese (Traditional)</option>
+                <option value="ca">Catalan</option>
+                <option value="zh-CHS">Chinese Simplified</option>
+                <option value="zh-CHT">Chinese Traditional</option>
+                <option value="hr">Croatian</option>
+                <option value="cs">Czech</option>
+                <option value="da">Danish</option>
+                <option value="nl">Dutch</option>
+                <option value="en">English</option>
+                <option value="et">Estonian</option>
+                <option value="fj">Fijian</option>
+                <option value="fil">Filipino</option>
+                <option value="fi">Finnish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="el">Greek</option>
+                <option value="ht">Haitian Creole</option>
+                <option value="he">Hebrew</option>
+                <option value="hi">Hindi</option>
+                <option value="mww">Hmong Daw</option>
+                <option value="hu">Hungarian</option>
+                <option value="is">Icelandic</option>
+                <option value="id">Indonesian</option>
+                <option value="it">Italian</option>
+                <option value="ja">Japanese</option>
+                <option value="tlh">Klingon</option>
+                <option value="tlh-Qaak">Klingon (plqaD)</option>
+                <option value="ko">Korean</option>
+                <option value="lv">Latvian</option>
+                <option value="lt">Lithuanian</option>
+                <option value="mg">Malagasy</option>
+                <option value="ms">Malay</option>
+                <option value="mt">Maltese</option>
+                <option value="no">Norwegian</option>
+                <option value="fa">Persian</option>
+                <option value="pl">Polish</option>
+                <option value="pt">Portuguese</option>
+                <option value="otq">Quer&#233;taro Otomi</option>
+                <option value="ro">Romanian</option>
+                <option value="ru">Russian</option>
+                <option value="sm">Samoan</option>
+                <option value="sr-Cyrl">Serbian (Cyrillic)</option>
+                <option value="sr-Latn">Serbian (Latin)</option>
+                <option value="sk">Slovak</option>
+                <option value="sl">Slovenian</option>
+                <option value="es">Spanish</option>
+                <option value="sw">Swahili</option>
+                <option value="sv">Swedish</option>
+                <option value="ty">Tahitian</option>
+                <option value="ta">Tamil</option>
+                <option value="th">Thai</option>
+                <option value="to">Tongan</option>
+                <option value="tr">Turkish</option>
+                <option value="uk">Ukrainian</option>
+                <option value="ur">Urdu</option>
+                <option value="vi">Vietnamese</option>
+                <option value="cy">Welsh</option>
+                <option value="yua">Yucatec Maya</option>
+            </select>
+        </div>
+        <div>
+            <textarea id="t_sv"
+            style="border:1px solid #999999; width:100%;margin:5px 0;padding:3px;"
+            placeholder="Enter text or webpage URL here"
+            maxlength="5001" 
+            aria-label="Text to be translated"></textarea>
+        </div>
+        <div>To: 
+            <select id="t_tl" aria-label="Language selection">
+                <option value="af">Afrikaans</option>
+                <option value="ar">Arabic</option>
+                <option value="bn-BD">Bangla</option>
+                <option value="bs-Latn">Bosnian</option>
+                <option value="bg">Bulgarian</option>
+                <option value="yue">Cantonese (Traditional)</option>
+                <option value="ca">Catalan</option>
+                <option value="zh-CHS">Chinese Simplified</option>
+                <option value="zh-CHT">Chinese Traditional</option>
+                <option value="hr">Croatian</option>
+                <option value="cs">Czech</option>
+                <option value="da">Danish</option>
+                <option value="nl">Dutch</option>
+                <option value="en">English</option>
+                <option value="et">Estonian</option>
+                <option value="fj">Fijian</option>
+                <option value="fil">Filipino</option>
+                <option value="fi">Finnish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="el">Greek</option>
+                <option value="ht">Haitian Creole</option>
+                <option value="he">Hebrew</option>
+                <option value="hi">Hindi</option>
+                <option value="mww">Hmong Daw</option>
+                <option value="hu">Hungarian</option>
+                <option value="is">Icelandic</option>
+                <option value="id">Indonesian</option>
+                <option value="it">Italian</option>
+                <option value="ja">Japanese</option>
+                <option value="tlh">Klingon</option>
+                <option value="tlh-Qaak">Klingon (plqaD)</option>
+                <option value="ko">Korean</option>
+                <option value="lv">Latvian</option>
+                <option value="lt">Lithuanian</option>
+                <option value="mg">Malagasy</option>
+                <option value="ms">Malay</option>
+                <option value="mt">Maltese</option>
+                <option value="no">Norwegian</option>
+                <option value="fa">Persian</option>
+                <option value="pl">Polish</option>
+                <option value="pt">Portuguese</option>
+                <option value="otq">Quer&#233;taro Otomi</option>
+                <option value="ro">Romanian</option>
+                <option value="ru">Russian</option>
+                <option value="sm">Samoan</option>
+                <option value="sr-Cyrl">Serbian (Cyrillic)</option>
+                <option value="sr-Latn">Serbian (Latin)</option>
+                <option value="sk">Slovak</option>
+                <option value="sl">Slovenian</option>
+                <option value="es" selected="selected">Spanish</option>
+                <option value="sw">Swahili</option>
+                <option value="sv">Swedish</option>
+                <option value="ty">Tahitian</option>
+                <option value="ta">Tamil</option>
+                <option value="th">Thai</option>
+                <option value="to">Tongan</option>
+                <option value="tr">Turkish</option>
+                <option value="uk">Ukrainian</option>
+                <option value="ur">Urdu</option>
+                <option value="vi">Vietnamese</option>
+                <option value="cy">Welsh</option>
+                <option value="yua">Yucatec Maya</option>
+            </select>
+        </div>
+        <div>
+                
+        </div>
+        <div>
+            <input type="button" id="testbutton" value="Translate!" onclick="sendForm();"/>
+        </div>        
+        
+        
+    </form>
+    <table border="1" width="100%">
+        <tr>
+            <td><b><u>Raw Results:</u></b></td>
+            <td><b><u>Clean Results:</u></b></td>
+        </tr>
+        <tr>
+            <td id="rawResults" width="50%">&nbsp;</td>
+            <td id="cleanResults" width="50%"><textarea item-width="100%" readonly="readonly" id="t_tv"
+                style="border:1px solid #999999; width:100%;margin:5px 0;padding:3px;"
+                placeholder="Translation" tabindex="0"
+                aria-label="Translated text"></textarea></td>
+        </tr>
+    </table>
+
+</body>
+</html>
