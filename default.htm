@@ -1,18 +1,16 @@
 <html>
 <head>
     <title>Test Form</title>
+        <!-- ******************************* -->
+        <!-- ** For Demo Only, Do not Use ** -->
+        <!-- ******************************* -->
+        <!-- Just Style Sheet Stuff to make this demo look prettier. Replace with your own website's stylesheets -->
+        <link href="MetroStyle/default.css" rel="stylesheet" />
+        <!-- ******************************** -->
+        <!-- ** /For Demo Only, Do not Use ** -->
+        <!-- ******************************** -->
+
 <script>
-    /*=======================================================================
-    ================================ TO-DO ==================================
-
-    Need to replace [ApiKey] to funcction.  
-    Search/Replace this value before testing.
-
-    ================================ IMPORTANT ==============================
-    =========================================================================
-    = THIS EXAMPLE IS FOR TEST PURPOSES ONLY!!  DO NOT USE IN PRODUCTION    =
-    = USING THIS IN PRODUCTION WILL EXPOSE YOUR API KEY FOR ALL TO SEE!!    =
-    =======================================================================*/
 
     /*--------------
     - Send Handler -
@@ -24,6 +22,8 @@
         //see API documentation here: https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
+                // Specify a JavaScript function as the callback or response handler 
+                // to execute once the XMLHttpRequest returns.
                 transCallback(xhr);
             }
         }
@@ -34,16 +34,17 @@
         var path = "translate?api-version=3.0&to=" + document.getElementById("t_tl").value;
         xhr.open("POST", host + path);
         xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-        /*=======================================================================
-        ================================ IMPORTANT ==============================
-        =========================================================================
-        = THIS EXAMPLE IS FOR TEST PURPOSES ONLY!!  DO NOT USE IN PRODUCTION    =
-        = USING THIS IN PRODUCTION WILL EXPOSE YOUR API KEY FOR ALL TO SEE!!    =
-        =                                                                       =
-        = Consider using server-side processing of the request instead!         =
-        =========================================================================
-        =======================================================================*/
-        xhr.setRequestHeader("Ocp-Apim-Subscription-Key", "[ApiKey]");
+        
+        // Obtain the API Key provided in the text area.  
+        var sApiKey = document.getElementById("t_sub").value;
+        if (sApiKey == '')
+        {
+            // If API Key omitted, error out and do not continue
+            alert("Please provide an Azure TextTranslation API Key.");
+            return false;
+        }
+
+        xhr.setRequestHeader("Ocp-Apim-Subscription-Key", sApiKey);
         var item = {
                 "Text":document.getElementById("t_sv").value
         }
@@ -59,14 +60,14 @@
     --------------------*/
     function transCallback(XmlHttpObject){
         //drop raw results to screen
-        document.getElementById("rawResults").innerHTML =  XmlHttpObject.responseText;
+        document.getElementById("t_raw").innerText =  XmlHttpObject.responseText;
 
         //parse results and cleanup (ignoring image region data for this test harness)
         var rawJSON = XmlHttpObject.responseText;
         var tmp = JSON.parse(rawJSON);
 
         //show translated text
-        document.getElementById("t_tv").innerText = tmp[0].translations[0].text;
+        document.getElementById("t_clean").innerText = tmp[0].translations[0].text;
 
     }
 
@@ -76,7 +77,7 @@
 <body>
     <h1>Translation Test Harness</h1>
     <form>
-        <div>From:
+        <div style="width: 100%;text-align: center;">From:
             <select id="t_sl" aria-label="Language selection">
                 <option value="auto-detect" selected="selected">Auto-Detect</option>
                 <option value="af">Afrikaans</option>
@@ -144,14 +145,14 @@
                 <option value="yua">Yucatec Maya</option>
             </select>
         </div>
-        <div>
+        <div style="width: 100%;text-align: center;">
             <textarea id="t_sv"
             style="border:1px solid #999999; width:100%;margin:5px 0;padding:3px;"
             placeholder="Enter text or webpage URL here"
             maxlength="5001" 
             aria-label="Text to be translated"></textarea>
         </div>
-        <div>To: 
+        <div style="width: 100%;text-align: center;">To: 
             <select id="t_tl" aria-label="Language selection">
                 <option value="af">Afrikaans</option>
                 <option value="ar">Arabic</option>
@@ -221,7 +222,8 @@
         <div>
                 
         </div>
-        <div>
+        <div style="width: 100%;text-align: center;">
+            <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-how-to-signup">API Key:</a> <input type="text" id="t_sub" placeholder="TextTranslation API Key" />
             <input type="button" id="testbutton" value="Translate!" onclick="sendForm();"/>
         </div>        
         
@@ -233,8 +235,11 @@
             <td><b><u>Clean Results:</u></b></td>
         </tr>
         <tr>
-            <td id="rawResults" width="50%">&nbsp;</td>
-            <td id="cleanResults" width="50%"><textarea item-width="100%" readonly="readonly" id="t_tv"
+            <td id="rawResults" width="50%"><textarea item-width="100%" readonly="readonly" id="t_raw"
+                style="border:1px solid #999999; width:100%;margin:5px 0;padding:3px;"
+                placeholder="Raw JSON Results" tabindex="0"
+                aria-label="Translated JSON Results"></textarea></td>
+            <td id="cleanResults" width="50%"><textarea item-width="100%" readonly="readonly" id="t_clean"
                 style="border:1px solid #999999; width:100%;margin:5px 0;padding:3px;"
                 placeholder="Translation" tabindex="0"
                 aria-label="Translated text"></textarea></td>

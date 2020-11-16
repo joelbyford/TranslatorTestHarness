@@ -1,11 +1,8 @@
-<h1>Azure Translation Javascript Test Harness</h1>
-<p>A simple pure Javascript-only test harness that can be used to testand learn translations REST/JSON with the Azure Translation API. </p> 
+# Azure Translation Javascript Test Harness
+A simple pure Javascript-only test harness that can be used to test and learn translations REST/JSON with the Azure Translation API. 
 
-<H2>INSTALLATION:</H2>
-Must replace [ApiKey] and in the default.htm file before using.
+## Installation/Setup:
+Open the default.htm file, fill out the form and be sure you have an API key from Azure TextTranslation before attempting to use.
 
-<h2>CAUTION:</h2>
-<b>DO NOT USE FOR PRODUCTION!</b>
-THIS EXAMPLE IS FOR TEST PURPOSES ONLY!!  DO NOT USE IN PRODUCTION  
-USING THIS IN PRODUCTION WILL EXPOSE YOUR API KEY FOR ALL TO SEE!!
-
+## Prerequisite
+This demo requires an API Key obtained by registering for an Azure TextTranslate account.  Please see the official [Azure Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-how-to-signup) on how to sign-up for a new account.  
